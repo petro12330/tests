@@ -12,7 +12,7 @@ class Bot:
         self.key = 'af0deccbgcgidddjgnvljitntccdduijhdinfgjgfjir'
         self.conn = http.client.HTTPSConnection("m.avito.ru", timeout=10)
         self.ua = UserAgent()
-        self.count = None
+
 
     def get_id_location(self):
         payload = ''
@@ -52,8 +52,8 @@ class Bot:
         res = self.conn.getresponse()
         data = res.read().decode("utf-8")
         items = json.loads(data)['result']["items"]
-        self.count = count
-        print(self.count)
+
+        print(count)
         if len(items) > 0:
             positiv = 0
             for i in range(len(items)):
@@ -61,12 +61,13 @@ class Bot:
                 if item['time'] >= time:
                     positiv += 1
             if positiv != 0:
-                self.get_count(id_location, time=time, page=page + 1, count=self.count + positiv)
+                return self.get_count(id_location, time=time, page=page + 1, count=count + positiv)
             else:
-
-                return self.count
+                self.conn.close()
+                return count
         else:
-            return self.count
+            self.conn.close()
+            return count
 
 
 def main(id, time):
@@ -74,8 +75,6 @@ def main(id, time):
     item = Bot(pair)
     id_location = item.get_id_location()
     count = item.get_count(id_location=id_location, time=time)
-    print(count)
+    return count
 
 
-if __name__ == '__main__':
-    print(main(1, 1576266383))
