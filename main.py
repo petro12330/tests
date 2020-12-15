@@ -7,8 +7,8 @@ app = FastAPI()
 
 @app.get("/start")
 def read_root(id : int, time : int):
-    api.main(id, time)
-    return
+    count = api.main(id, time)
+    return {'count': count}
 
 
 @app.post("/add")

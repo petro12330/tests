@@ -52,8 +52,6 @@ class Bot:
         res = self.conn.getresponse()
         data = res.read().decode("utf-8")
         items = json.loads(data)['result']["items"]
-
-        print(count)
         if len(items) > 0:
             positiv = 0
             for i in range(len(items)):
